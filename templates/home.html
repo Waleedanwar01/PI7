@@ -8,7 +8,7 @@
 
   <!-- Moving City Background (Slow Parallax) -->
   <div class="absolute bottom-[35%] left-0 right-0 h-48 opacity-20 bg-repeat-x animate-city-scroll" 
-       style="background-image: url('https://raw.githubusercontent.com/google/material-design-icons/master/png/social/location_city/materialicons/24dp/2x/baseline_location_city_white_24dp.png'); background-size: auto 100%;">
+       style="background-image: url('{% static "images/backgrounds/city_skyline.svg" %}'); background-size: auto 100%;">
   </div>
 
   <!-- Moving Road -->
@@ -212,7 +212,7 @@
           {% for company in companies %}
           <a href="{{ company.landing_url }}" target="_blank" class="h-10 flex items-center justify-center opacity-70 hover:opacity-100 transition" title="{{ company.name }} - {{ company.description }}">
             {% if company.logo %}
-            <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="max-h-full max-w-full object-contain">
+            <img src="{{ company.logo.url|cloudinary_optimize }}" alt="{{ company.name }}" class="max-h-full max-w-full object-contain">
             {% else %}
             <span class="text-sm font-semibold uppercase tracking-wide text-gray-600">{{ company.name }}</span>
             {% endif %}

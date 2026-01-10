@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from core.models import Company, HomeVideo, QuickFAQ, BlogCategory, BlogPost
 from django.db.models import Prefetch
+from django.views.decorators.cache import cache_page
 
+@cache_page(60 * 15)
 def home(request):
     companies = Company.objects.filter(is_show_on_home=True).order_by('order')
     videos = HomeVideo.objects.filter(is_active=True).order_by('order')

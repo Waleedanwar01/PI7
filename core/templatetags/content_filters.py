@@ -98,6 +98,17 @@ def add_heading_ids(html):
 def extract_headings(html):
     if not html:
         return []
+
+@register.filter
+def cloudinary_optimize(url):
+    """
+    Injects f_auto,q_auto into Cloudinary URLs.
+    """
+    if not url or 'cloudinary.com' not in url:
+        return url
+    if '/upload/' in url and '/upload/f_auto,q_auto/' not in url:
+        return url.replace('/upload/', '/upload/f_auto,q_auto/')
+    return url
     heads = []
     for m in re.finditer(r'<h[2-3][^>]*>(.*?)</h[2-3]>', html, flags=re.IGNORECASE|re.DOTALL):
         text = re.sub(r'<[^>]+>', '', m.group(1)).strip()

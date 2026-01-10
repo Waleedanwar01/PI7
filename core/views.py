@@ -6,9 +6,11 @@ from django.core.files.storage import default_storage
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q
+from django.views.decorators.cache import cache_page
 import os, time
 from .models import ContactSubmission, FooterPage, TeamMember, FaqCategory, FaqPost, BlogCategory, BlogPost, QuickFAQ, ZipCode, Company, ZipRange
 
+@cache_page(60 * 15)
 def zip_search(request):
     zip_code = request.GET.get('zip', '').strip()
     companies = []
@@ -57,6 +59,7 @@ def contact(request):
         return render(request, "contact.html", {'error': "Please fill all fields."})
     return render(request, "contact.html")
 
+@cache_page(60 * 60)
 def footer_page(request, slug):
     link = f"/pages/{slug}/"
     page = get_object_or_404(FooterPage, link=link, is_active=True)
@@ -65,10 +68,12 @@ def footer_page(request, slug):
         team_members = TeamMember.objects.filter(is_active=True).order_by('order')
     return render(request, "footer_page.html", {'page': page, 'team_members': team_members})
 
+@cache_page(60 * 60)
 def team_member_detail(request, pk):
     member = get_object_or_404(TeamMember, pk=pk, is_active=True)
     return render(request, "team_member_detail.html", {'member': member})
 
+@cache_page(60 * 15)
 def faq_home(request):
     categories = FaqCategory.objects.filter(is_active=True, parent__isnull=True).order_by('order')
     latest = FaqPost.objects.filter(is_active=True).order_by('-updated_at').first()
@@ -78,18 +83,21 @@ def faq_home(request):
         'latest_post': latest
     })
 
+@cache_page(60 * 15)
 def faq_category(request, slug):
     cat = get_object_or_404(FaqCategory, slug=slug, is_active=True)
     subcats = cat.children.filter(is_active=True).order_by('order')
     posts = cat.posts.filter(is_active=True).order_by('order')
     return render(request, "faq_category.html", {'category': cat, 'subcategories': subcats, 'posts': posts})
 
+@cache_page(60 * 15)
 def faq_post_detail(request, slug):
     post = get_object_or_404(FaqPost, slug=slug, is_active=True)
     related = FaqPost.objects.filter(is_active=True, category=post.category).exclude(pk=post.pk).order_by('order')[:9]
     images = list(post.images.filter(is_active=True).order_by('order'))
     return render(request, "faq_post_detail.html", {'post': post, 'related_posts': related, 'images': images})
 
+@cache_page(60 * 15)
 def companies_faqs(request):
     categories = FaqCategory.objects.filter(is_active=True, parent__isnull=True).order_by('order')
     latest = FaqPost.objects.filter(is_active=True).order_by('-updated_at').first()
