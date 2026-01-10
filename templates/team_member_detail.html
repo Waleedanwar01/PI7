@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ member.name }}{% endblock %}
+{% block main_class %}max-w-4xl mx-auto px-4 py-8{% endblock %}
+{% block content %}
+<section class="relative overflow-hidden rounded-2xl text-white mb-8">
+  <div class="absolute inset-0 bg-gradient-to-r from-[#0F3C7A] via-blue-700 to-blue-500"></div>
+  <div class="relative z-10 px-6 sm:px-10 lg:px-14 py-14">
+    <h1 class="text-4xl sm:text-5xl font-extrabold">{{ member.name }}</h1>
+    <p class="mt-2 text-white/90">{{ member.position }}</p>
+  </div>
+</section>
+<section class="rounded-2xl bg-white">
+  <div class="px-6 sm:px-10 lg:px-14 py-10">
+    <div class="grid md:grid-cols-3 gap-6">
+      <div>
+        <div class="rounded-lg overflow-hidden bg-gray-100">
+          {% if member.photo %}<img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover">{% endif %}
+        </div>
+        <div class="mt-4 grid grid-cols-3 gap-2">
+          {% if member.facebook_url %}<a href="{{ member.facebook_url }}" class="btn btn-sm btn-secondary">Facebook</a>{% endif %}
+          {% if member.twitter_url %}<a href="{{ member.twitter_url }}" class="btn btn-sm btn-secondary">Twitter</a>{% endif %}
+          {% if member.instagram_url %}<a href="{{ member.instagram_url }}" class="btn btn-sm btn-secondary">Instagram</a>{% endif %}
+          {% if member.linkedin_url %}<a href="{{ member.linkedin_url }}" class="btn btn-sm btn-secondary">LinkedIn</a>{% endif %}
+          {% if member.youtube_url %}<a href="{{ member.youtube_url }}" class="btn btn-sm btn-secondary">YouTube</a>{% endif %}
+          {% if member.website_url %}<a href="{{ member.website_url }}" class="btn btn-sm btn-secondary">Website</a>{% endif %}
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        {% if member.description %}<div class="page-content single">{{ member.description|safe }}</div>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

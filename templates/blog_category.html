@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }}{% endblock %}
+{% block main_class %}max-w-7xl mx-auto px-4 py-8{% endblock %}
+{% block content %}
+<section class="relative overflow-hidden rounded-none text-white mb-8">
+  <div class="absolute inset-0 bg-gradient-to-r from-[#0F3C7A] via-blue-700 to-blue-500"></div>
+  <div class="relative z-10 px-6 sm:px-10 lg:px-14 py-14">
+    <h1 class="text-4xl sm:text-5xl font-extrabold">{{ category.name }}</h1>
+  </div>
+</section>
+<section class="rounded-none bg-white">
+  <div class="px-6 sm:px-10 lg:px-14 py-10">
+    {% if subcategories %}
+    <h2 class="text-xl font-bold text-gray-900 mb-4">Subcategories</h2>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+      {% for sc in subcategories %}
+      <a href="{% url 'blog_category' sc.slug %}" class="group block rounded-none border bg-white p-5 hover:shadow-lg transition">
+        <div class="text-lg font-bold text-gray-900">{{ sc.name }}</div>
+        <div class="text-sm text-gray-600 mt-2">Read articles</div>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <h2 class="text-xl font-bold text-gray-900 mb-4">Articles</h2>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {% for p in posts %}
+      <a href="{% url 'blog_post_detail' p.slug %}" class="group block rounded-none border bg-white p-5 hover:shadow-lg transition">
+        <div class="text-lg font-bold text-gray-900">{{ p.title }}</div>
+        {% if p.summary %}<div class="text-sm text-gray-600 mt-2">{{ p.summary|truncatechars:100 }}</div>{% endif %}
+        <div class="text-sm text-blue-700 mt-2">Read article</div>
+      </a>
+      {% empty %}
+      <div class="text-gray-600">No posts yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

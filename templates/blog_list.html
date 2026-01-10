@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}All Blogs{% endblock %}
+{% block main_class %}max-w-7xl mx-auto px-4 py-8{% endblock %}
+{% block content %}
+
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+  <!-- Sidebar -->
+  <aside class="lg:col-span-1 space-y-8">
+    <div class="rounded-2xl border bg-white p-6 shadow-sm">
+      <h3 class="text-lg font-bold text-gray-900 mb-4">Categories</h3>
+      <div class="space-y-2">
+        {% for c in categories %}
+        <a href="{% url 'blog_category' c.slug %}" class="block text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-2 rounded-lg transition">
+          {{ c.name }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="lg:col-span-3">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-6">Latest Articles</h1>
+    
+    <div class="grid gap-6 sm:grid-cols-2">
+      {% for p in page_obj %}
+      <a href="{% url 'blog_post_detail' p.slug %}" class="group block rounded-2xl border bg-white p-5 hover:shadow-lg transition h-full flex flex-col">
+        {% if p.hero_image %}
+        <div class="mb-4 overflow-hidden rounded-lg aspect-video">
+           <img src="{{ p.hero_image.url }}" alt="{{ p.title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+        </div>
+        {% endif %}
+        <div class="flex-1">
+          <div class="text-sm text-blue-600 font-semibold mb-2">{{ p.category.name }}</div>
+          <h2 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition">{{ p.title }}</h2>
+          {% if p.summary %}
+          <p class="text-sm text-gray-600 line-clamp-3">{{ p.summary }}</p>
+          {% endif %}
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
+           <span>{{ p.updated_at|date:"M d, Y" }}</span>
+           <span class="text-blue-700 font-medium group-hover:translate-x-1 transition">Read Article &rarr;</span>
+        </div>
+      </a>
+      {% empty %}
+      <div class="col-span-full text-center py-12 text-gray-500 bg-white rounded-2xl border">
+        No posts found.
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="mt-10 flex justify-center">
+      <nav class="flex items-center gap-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary btn-sm">Previous</a>
+        {% endif %}
+        
+        <span class="px-4 py-2 text-gray-600 font-medium">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary btn-sm">Next</a>
+        {% endif %}
+      </nav>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+databases:
+  - name: pi7_db
+    databaseName: pi7_db
+    user: pi7_user
+
+services:
+  - type: web
+    name: pi7
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pi7_db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
