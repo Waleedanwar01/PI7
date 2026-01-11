@@ -13,15 +13,17 @@ from .models import ContactSubmission, FooterPage, TeamMember, FaqCategory, FaqP
 @cache_page(60 * 15)
 def zip_search(request):
     zip_code = request.GET.get('zip', '').strip()
-    companies = []
+    companies_dict = {}
     
     if zip_code:
         # 1. Try exact match first (legacy support)
         try:
             zip_obj = ZipCode.objects.get(code=zip_code)
-            companies = list(zip_obj.companies.filter(is_show_on_home=True).order_by('order'))
+            for c in zip_obj.companies.filter(is_show_on_home=True).order_by('order'):
+                c.is_top_pick_calculated = False
+                companies_dict[c.id] = c
         except ZipCode.DoesNotExist:
-            companies = []
+            pass
 
         # 2. Check ranges and state-wide companies
         if zip_code.isdigit():
@@ -30,18 +32,26 @@ def zip_search(request):
             ranges = ZipRange.objects.filter(
                 start_zip__lte=zip_int, 
                 end_zip__gte=zip_int
-            ).prefetch_related('companies')
+            ).prefetch_related('ziprangecompany_set__company')
             
             range_state_codes = set()
             
             for r in ranges:
                 # A. Companies assigned to the specific range
-                # Use .all() to leverage prefetch cache
-                range_companies = r.companies.all()
-                for c in range_companies:
+                # Use through model to get is_top_pick
+                zr_companies = r.ziprangecompany_set.all()
+                for zrc in zr_companies:
+                    c = zrc.company
                     if c.is_show_on_home:
-                        if c not in companies:
-                            companies.append(c)
+                        # Set top pick status
+                        c.is_top_pick_calculated = zrc.is_top_pick
+                        
+                        # Add/Update in dict
+                        if c.id not in companies_dict:
+                            companies_dict[c.id] = c
+                        elif zrc.is_top_pick:
+                            # Upgrade to top pick if found in another range as top pick
+                            companies_dict[c.id] = c
                 
                 # Collect state for batch query
                 if r.state:
@@ -55,11 +65,15 @@ def zip_search(request):
                 ).distinct().order_by('order')
                 
                 for c in state_companies:
-                    if c not in companies:
-                        companies.append(c)
+                    if c.id not in companies_dict:
+                        c.is_top_pick_calculated = False
+                        companies_dict[c.id] = c
             
-            # Re-sort final list by order
-            companies.sort(key=lambda x: x.order)
+    # Convert to list
+    companies = list(companies_dict.values())
+    
+    # Sort: Top picks first, then by order
+    companies.sort(key=lambda x: (not getattr(x, 'is_top_pick_calculated', False), x.order))
             
     return render(request, "zip_results.html", {'zip_code': zip_code, 'companies': companies})
 

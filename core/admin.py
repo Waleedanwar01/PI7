@@ -1,19 +1,23 @@
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
-from .models import SiteConfig, Company, FooterPage, ContactSubmission, TeamMember, FaqCategory, FaqPost, FaqImage, HomeVideo, BlogCategory, BlogPost, BlogImage, QuickFAQ, Announcement, ZipCode, ZipRange, State
+from .models import SiteConfig, Company, FooterPage, ContactSubmission, TeamMember, FaqCategory, FaqPost, FaqImage, HomeVideo, BlogCategory, BlogPost, BlogImage, QuickFAQ, Announcement, ZipCode, ZipRange, State, ZipRangeCompany
 
 @admin.register(State)
 class StateAdmin(admin.ModelAdmin):
     list_display = ('name', 'code')
     search_fields = ('name', 'code')
 
+class ZipRangeCompanyInline(admin.TabularInline):
+    model = ZipRangeCompany
+    extra = 1
+
 @admin.register(ZipRange)
 class ZipRangeAdmin(admin.ModelAdmin):
     list_display = ('get_range_display', 'get_company_count')
     search_fields = ('start_zip', 'end_zip', 'state')
     list_filter = ('state',)
-    filter_horizontal = ('companies',)
+    inlines = [ZipRangeCompanyInline]
     
     def get_range_display(self, obj):
         return str(obj)
@@ -27,8 +31,8 @@ from django import forms
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'rating', 'domain', 'order', 'is_show_on_home', 'is_top_pick')
-    list_editable = ('rating', 'order', 'is_show_on_home', 'is_top_pick')
+    list_display = ('name', 'rating', 'domain', 'order', 'is_show_on_home')
+    list_editable = ('rating', 'order', 'is_show_on_home')
     search_fields = ('name', 'domain')
     filter_horizontal = ('states',)
 

@@ -70,7 +70,6 @@ class Company(models.Model):
     description = models.TextField(blank=True, help_text="Short description of the company")
     order = models.IntegerField(default=0)
     is_show_on_home = models.BooleanField(default=True)
-    is_top_pick = models.BooleanField(default=False)
     
     # New fields for results page
     heading = models.CharField(max_length=255, blank=True, help_text="e.g. TN Drivers Could Save Big with GEICO")
@@ -93,6 +92,16 @@ class ZipCode(models.Model):
     def __str__(self):
         return self.code
 
+class ZipRangeCompany(models.Model):
+    zip_range = models.ForeignKey('ZipRange', on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    is_top_pick = models.BooleanField(default=False, verbose_name="Is Top Pick?")
+    
+    class Meta:
+        verbose_name = "Zip Range Company"
+        verbose_name_plural = "Zip Range Companies"
+        unique_together = ('zip_range', 'company')
+
 class ZipRange(models.Model):
     STATE_CHOICES = [
         ('AL', 'Alabama'), ('AK', 'Alaska'), ('AZ', 'Arizona'), ('AR', 'Arkansas'), ('CA', 'California'),
@@ -111,7 +120,7 @@ class ZipRange(models.Model):
     state = models.CharField(max_length=2, choices=STATE_CHOICES, blank=True, help_text="Select a state to automatically set zip range (optional)")
     start_zip = models.IntegerField(help_text="Start of the zip code range (e.g., 38000)")
     end_zip = models.IntegerField(help_text="End of the zip code range (e.g., 38050)")
-    companies = models.ManyToManyField(Company, related_name='zip_ranges', blank=True)
+    companies = models.ManyToManyField(Company, related_name='zip_ranges', blank=True, through='ZipRangeCompany')
     
     class Meta:
         verbose_name = "Zip Code Range"
