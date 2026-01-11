@@ -43,6 +43,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -167,12 +168,6 @@ CLOUDINARY_STORAGE = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TAILWIND_APP_NAME = 'theme'
-
-UNFOLD = {
-    "SITE_TITLE": "AutoInsurance Admin",
-    "SITE_HEADER": "AutoInsurance Dashboard",
-    "SITE_URL": "/",
-}
 
 UNFOLD = {
     "SITE_TITLE": "AutoInsurance Admin",
