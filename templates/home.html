@@ -417,7 +417,7 @@
       {% endfor %}
     </div>
     <div class="mt-10 flex justify-center">
-      <a href="{% if site_config.youtube_channel_name and 'http' in site_config.youtube_channel_name %}{{ site_config.youtube_channel_name }}{% elif site_config.youtube_channel_name %}https://www.youtube.com/{{ site_config.youtube_channel_name }}{% else %}{{ site_config.youtube_url|default:'https://www.youtube.com/@AutoInsuranceExperts' }}{% endif %}" target="_blank" rel="noopener" class="inline-flex items-center rounded-md bg-yellow-400 px-6 py-3 text-sm font-bold text-[#0F3C7A] hover:bg-yellow-300 shadow-md transition-colors uppercase tracking-wide">View All Videos</a>
+      <a href="{% if site_config.youtube_url %}{{ site_config.youtube_url }}{% elif site_config.youtube_channel_name %}{% if 'http' in site_config.youtube_channel_name %}{{ site_config.youtube_channel_name }}{% else %}https://www.youtube.com/{{ site_config.youtube_channel_name }}{% endif %}{% else %}https://www.youtube.com/@AutoInsuranceExperts{% endif %}" target="_blank" rel="noopener" class="inline-flex items-center bg-yellow-400 px-6 py-4 text-sm font-bold text-[#0F3C7A] hover:bg-yellow-300 shadow-md transition-colors uppercase tracking-wide">View All Videos</a>
     </div>
   </div>
 </section>
