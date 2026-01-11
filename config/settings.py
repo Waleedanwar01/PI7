@@ -173,3 +173,9 @@ UNFOLD = {
     "SITE_HEADER": "AutoInsurance Dashboard",
     "SITE_URL": "/",
 }
+
+UNFOLD = {
+    "SITE_TITLE": "AutoInsurance Admin",
+    "SITE_HEADER": "AutoInsurance Dashboard",
+    "SITE_URL": "/",
+}
