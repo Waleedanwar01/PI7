@@ -167,3 +167,9 @@ CLOUDINARY_STORAGE = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TAILWIND_APP_NAME = 'theme'
+
+UNFOLD = {
+    "SITE_TITLE": "AutoInsurance Admin",
+    "SITE_HEADER": "AutoInsurance Dashboard",
+    "SITE_URL": "/",
+}
