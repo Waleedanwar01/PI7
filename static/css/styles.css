@@ -95,72 +95,41 @@
     border-radius: 0;
     padding: 0.75rem 1.5rem;
     font-weight: 700;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease-in-out;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
     text-decoration: none;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     font-size: 0.875rem;
+    line-height: 1.25rem;
 }
 
-/* Shine Effect Animation */
-.btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition: 0.5s;
-    z-index: 1;
-}
-
-.btn:hover::after {
-    left: 100%;
-}
-
-.btn:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-}
-
-.btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.1);
-}
-
-/* Primary Button (Business Yellow - Solid/Gradient) */
+/* Primary Button (Yellow) */
 .btn-primary {
-    background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
-    color: #111827; /* Dark text for readability */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+    background-color: #FFD700;
+    color: #0F3C7A;
+    border: 2px solid #FFD700;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #FFD54F 0%, #FFC107 100%);
-    box-shadow: 0 0 25px rgba(255, 193, 7, 0.5);
-    border-color: rgba(255, 255, 255, 0.4);
+    background-color: #e6c200;
+    border-color: #e6c200;
+    color: #0F3C7A;
 }
 
-/* Secondary Button (Yellow Outline / Lighter Yellow) */
+/* Secondary Button (Blue Outline) */
 .btn-secondary {
-    background: #FFFFFF;
-    color: #F59E0B; /* Amber Text */
-    border: 2px solid #F59E0B;
+    background-color: transparent;
+    color: #0F3C7A;
+    border: 2px solid #0F3C7A;
 }
 
 .btn-secondary:hover {
-    background: #F59E0B;
-    color: #111827;
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    background-color: #0F3C7A;
+    color: #FFFFFF;
 }
 
-/* Outline Button (Subtle Business Look) */
+/* Outline Button (Gray) */
 .btn-outline {
     background: transparent;
     border: 2px solid #D1D5DB;
@@ -168,15 +137,19 @@
 }
 
 .btn-outline:hover {
-    border-color: #F59E0B;
-    color: #F59E0B;
-    background: #FFFBEB; /* Very light yellow bg */
+    border-color: #FFD700;
+    color: #0F3C7A;
 }
 
-/* Small variant */
+/* Sizes */
 .btn-sm {
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
 }
 
 /* Full width on mobile if needed */
