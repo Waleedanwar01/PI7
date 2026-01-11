@@ -1,41 +1,14 @@
 {% load static %}
 {% load content_filters %}
+{% load tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <title>{% block title %}Django App{% endblock %} - {{ site_config.site_name|default:"AutoInsurance.com" }}</title>
     <link rel="icon" type="image/webp" href="{% static 'images/logos/Autoinsurance.webp' %}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: [
-                'system-ui',
-                '-apple-system',
-                'BlinkMacSystemFont',
-                '"Segoe UI"',
-                'Roboto',
-                '"Helvetica Neue"',
-                'Arial',
-                '"Noto Sans"',
-                'sans-serif',
-                '"Apple Color Emoji"',
-                '"Segoe UI Emoji"',
-                '"Segoe UI Symbol"',
-                '"Noto Color Emoji"',
-              ],
-            },
-          },
-        },
-      }
-    </script>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    {% tailwind_css %}
   </head>
   <body class="min-h-screen bg-gray-50 text-gray-900 font-sans">
     {% if announcements %}
