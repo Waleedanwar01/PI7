@@ -26,22 +26,37 @@ def zip_search(request):
         # 2. Check ranges and state-wide companies
         if zip_code.isdigit():
             zip_int = int(zip_code)
-            # Find all ranges that contain this zip code
-            ranges = ZipRange.objects.filter(start_zip__lte=zip_int, end_zip__gte=zip_int)
+            # Find all ranges that contain this zip code, prefetch companies
+            ranges = ZipRange.objects.filter(
+                start_zip__lte=zip_int, 
+                end_zip__gte=zip_int
+            ).prefetch_related('companies')
+            
+            range_state_codes = set()
             
             for r in ranges:
                 # A. Companies assigned to the specific range
-                range_companies = r.companies.filter(is_show_on_home=True).order_by('order')
+                # Use .all() to leverage prefetch cache
+                range_companies = r.companies.all()
                 for c in range_companies:
-                    if c not in companies:
-                        companies.append(c)
-                
-                # B. Companies assigned to the STATE of this range
-                if r.state:
-                    state_companies = Company.objects.filter(states__code=r.state, is_show_on_home=True).order_by('order')
-                    for c in state_companies:
+                    if c.is_show_on_home:
                         if c not in companies:
                             companies.append(c)
+                
+                # Collect state for batch query
+                if r.state:
+                    range_state_codes.add(r.state)
+            
+            # B. Companies assigned to the STATE of this range (Batch Query)
+            if range_state_codes:
+                state_companies = Company.objects.filter(
+                    states__code__in=range_state_codes, 
+                    is_show_on_home=True
+                ).distinct().order_by('order')
+                
+                for c in state_companies:
+                    if c not in companies:
+                        companies.append(c)
             
             # Re-sort final list by order
             companies.sort(key=lambda x: x.order)
