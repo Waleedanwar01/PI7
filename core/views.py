@@ -10,7 +10,7 @@ from django.views.decorators.cache import cache_page
 import os, time
 from .models import ContactSubmission, FooterPage, TeamMember, FaqCategory, FaqPost, BlogCategory, BlogPost, QuickFAQ, ZipCode, Company, ZipRange
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def zip_search(request):
     zip_code = request.GET.get('zip', '').strip()
     companies_dict = {}
