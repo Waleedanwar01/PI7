@@ -14,7 +14,8 @@ def site_config(request):
         config = None
         
     companies = list(Company.objects.filter(is_show_on_home=True).order_by('order'))
-    top_pick_companies = list(Company.objects.filter(is_top_pick=True).order_by('order'))
+    # Top picks are now zip-range specific, so we return an empty list globally or handle it differently if needed
+    top_pick_companies = []
     legal_pages = list(FooterPage.objects.filter(is_active=True, category='legal').order_by('order'))
     company_pages = list(FooterPage.objects.filter(is_active=True, category='companies').order_by('order'))
     faq_roots = list(FaqCategory.objects.filter(is_active=True, parent__isnull=True).order_by('order'))
