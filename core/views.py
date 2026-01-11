@@ -59,7 +59,7 @@ def contact(request):
         return render(request, "contact.html", {'error': "Please fill all fields."})
     return render(request, "contact.html")
 
-@cache_page(60 * 60)
+# @cache_page(60 * 60)
 def footer_page(request, slug):
     link = f"/pages/{slug}/"
     page = get_object_or_404(FooterPage, link=link, is_active=True)
@@ -83,21 +83,21 @@ def faq_home(request):
         'latest_post': latest
     })
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def faq_category(request, slug):
     cat = get_object_or_404(FaqCategory, slug=slug, is_active=True)
     subcats = cat.children.filter(is_active=True).order_by('order')
     posts = cat.posts.filter(is_active=True).order_by('order')
     return render(request, "faq_category.html", {'category': cat, 'subcategories': subcats, 'posts': posts})
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def faq_post_detail(request, slug):
     post = get_object_or_404(FaqPost, slug=slug, is_active=True)
     related = FaqPost.objects.filter(is_active=True, category=post.category).exclude(pk=post.pk).order_by('order')[:9]
     images = list(post.images.filter(is_active=True).order_by('order'))
     return render(request, "faq_post_detail.html", {'post': post, 'related_posts': related, 'images': images})
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def companies_faqs(request):
     categories = FaqCategory.objects.filter(is_active=True, parent__isnull=True).order_by('order')
     latest = FaqPost.objects.filter(is_active=True).order_by('-updated_at').first()
